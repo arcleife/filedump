@@ -104,15 +104,15 @@ def GetAndExport(time, filename):
     data_press = GetFromDatabase(time, 8)
     data_hum = GetFromDatabase(time, 9)
 
-    df_temp = pd.DataFrame(data_temp, columns=['time', 'temp'])
-    df_press = pd.DataFrame(data_press, columns=['time', 'press'])
-    df_hum = pd.DataFrame(data_hum, columns=['time', 'hum'])
+    df_temp = pd.DataFrame(data_temp, columns=['Time', 'Temp ch1'])
+    df_press = pd.DataFrame(data_press, columns=['Time', 'Pressure ch1'])
+    df_hum = pd.DataFrame(data_hum, columns=['Time', 'Humidity ch1'])
 
-    df_temp['time'] = df_temp['time'].dt.strftime('%Y/%m/%d %H:%M')
-    df_press['time'] = df_press['time'].dt.strftime('%Y/%m/%d %H:%M')
-    df_hum['time'] = df_hum['time'].dt.strftime('%Y/%m/%d %H:%M')
+    df_temp['Time'] = df_temp['Time'].dt.strftime('%Y/%m/%d %H:%M')
+    df_press['Time'] = df_press['Time'].dt.strftime('%Y/%m/%d %H:%M')
+    df_hum['Time'] = df_hum['Time'].dt.strftime('%Y/%m/%d %H:%M')
 
-    output = df_temp.join ([df_press['press'], df_hum['hum']])
+    output = df_temp.join ([df_press['Pressure ch1'], df_hum['Humidity ch1']])
 
     output.to_csv(filename, index=False)
     
@@ -124,15 +124,15 @@ def GetAndExport(filename):
     data_press = GetFromDatabase(time, 8)
     data_hum = GetFromDatabase(time, 9)
 
-    df_temp = pd.DataFrame(data_temp, columns=['time', 'temp'])
-    df_press = pd.DataFrame(data_press, columns=['time', 'press'])
-    df_hum = pd.DataFrame(data_hum, columns=['time', 'hum'])
+    df_temp = pd.DataFrame(data_temp, columns=['Time', 'Temp ch1'])
+    df_press = pd.DataFrame(data_press, columns=['Time', 'Pressure ch1'])
+    df_hum = pd.DataFrame(data_hum, columns=['Time', 'Humidity ch1'])
 
-    df_temp['time'] = df_temp['time'].dt.strftime('%Y/%m/%d %H:%M')
-    df_press['time'] = df_press['time'].dt.strftime('%Y/%m/%d %H:%M')
-    df_hum['time'] = df_hum['time'].dt.strftime('%Y/%m/%d %H:%M')
+    df_temp['Time'] = df_temp['Time'].dt.strftime('%Y/%m/%d %H:%M')
+    df_press['Time'] = df_press['Time'].dt.strftime('%Y/%m/%d %H:%M')
+    df_hum['Time'] = df_hum['Time'].dt.strftime('%Y/%m/%d %H:%M')
 
-    output = df_temp.join ([df_press['press'], df_hum['hum']])
+    output = df_temp.join ([df_press['Pressure ch1'], df_hum['Humidity ch1']])
 
     output.to_csv(filename, index=False)
 

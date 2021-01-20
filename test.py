@@ -1,3 +1,3 @@
 import reader
 
-print("hello")
+reader.GetAndExport("export/out.csv")
