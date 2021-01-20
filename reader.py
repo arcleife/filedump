@@ -119,8 +119,8 @@ def GetAndExport(filename, time=""):
 
 def RecordAnomaly(time):
     hostname = '127.0.0.1'
-    username = 'root'
-    password = 'secret'
+    username = 'admin'
+    password = '#anomaly1'
     database = 'anomaly_db'
 
     myConnection = MySQLdb.connect( host=hostname, user=username, passwd=password, db=database)
@@ -131,7 +131,7 @@ def RecordAnomaly(time):
     current_time = time_until.strftime("%Y-%m-%d %H:%M:%S")
     last_hour_time = time_from.strftime("%Y-%m-%d %H:%M:%S")
 
-    val = (current_time, last_hour_time)
+    val = (last_hour_time, current_time)
     cur.execute( "INSERT INTO anomalies(occur_from, occur_until) VALUES (%s, %s);", val)
     
     myConnection.commit()
@@ -164,4 +164,4 @@ if __name__ == "__main__":
     # WriteToDatabase(bplus)
 
     #GetAndExport('output.csv')
-    #RecordAnomaly(datetime.now())
+    RecordAnomaly(datetime.now())
