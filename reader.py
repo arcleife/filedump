@@ -95,28 +95,9 @@ def GetFromDatabase(time, id):
     myConnection.close()
 
     return rows
-
-def GetAndExport(time, filename):
-    time = datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
-
-    # Change to 7, 8, 9 when deployed
-    data_temp = GetFromDatabase(time, 7)
-    data_press = GetFromDatabase(time, 8)
-    data_hum = GetFromDatabase(time, 9)
-
-    df_temp = pd.DataFrame(data_temp, columns=['Time', 'Temp ch1'])
-    df_press = pd.DataFrame(data_press, columns=['Time', 'Pressure ch1'])
-    df_hum = pd.DataFrame(data_hum, columns=['Time', 'Humidity ch1'])
-
-    df_temp['Time'] = df_temp['Time'].dt.strftime('%Y/%m/%d %H:%M')
-    df_press['Time'] = df_press['Time'].dt.strftime('%Y/%m/%d %H:%M')
-    df_hum['Time'] = df_hum['Time'].dt.strftime('%Y/%m/%d %H:%M')
-
-    output = df_temp.join ([df_press['Pressure ch1'], df_hum['Humidity ch1']])
-
-    output.to_csv(filename, index=False)
     
-def GetAndExport(filename):
+def GetAndExport(filename, time=""):
+    # time = datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
     time = datetime.now()
 
     # Change to 7, 8, 9 when deployed
@@ -135,6 +116,26 @@ def GetAndExport(filename):
     output = df_temp.join ([df_press['Pressure ch1'], df_hum['Humidity ch1']])
 
     output.to_csv(filename, index=False)
+
+def RecordAnomaly(time):
+    hostname = '127.0.0.1'
+    username = 'root'
+    password = 'secret'
+    database = 'anomaly_db'
+
+    myConnection = MySQLdb.connect( host=hostname, user=username, passwd=password, db=database)
+    cur = myConnection.cursor()
+
+    time_until = time
+    time_from = time_until - timedelta(hours=1)
+    current_time = time_until.strftime("%Y-%m-%d %H:%M:%S")
+    last_hour_time = time_from.strftime("%Y-%m-%d %H:%M:%S")
+
+    val = (current_time, last_hour_time)
+    cur.execute( "INSERT INTO anomalies(occur_from, occur_until) VALUES (%s, %s);", val)
+    
+    myConnection.commit()
+    myConnection.close()
 
             
 if __name__ == "__main__":
@@ -162,6 +163,5 @@ if __name__ == "__main__":
     # WriteToDatabase(b)
     # WriteToDatabase(bplus)
 
-    #
-
-    GetAndExport('output.csv')
+    #GetAndExport('output.csv')
+    #RecordAnomaly(datetime.now())
